@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://sdk.amazonaws.com/js/aws-sdk-2.805.0.min.js"></script>
+    </head>
+    <body>
+        <h1>Trump or Biden?</h1>
+        <input id="photoupload" type="file" accept="image/*">
+        <button id="addphoto" onclick="uploadPhoto()">Upload</button>
+        <p id="status"></p>
+        <div>
+            <img id="selected-image" height="500">
+        </div>
+        <h2>
+            <div id="response"></div>
+        </h2>
+
+        <script>
+            const status = document.getElementById('status');
+            const output = document.getElementById('selected-image');
+            if (window.FileList && window.File && window.FileReader) {
+                document.getElementById('photoupload').addEventListener('change', event => {
+                    document.getElementById('response').innerHTML = "";
+                    output.src = '';
+                    status.textContent = '';
+                    const file = event.target.files[0];
+                    if (!file.type) {
+                        status.textContent = 'Error: The File.type property does not appear to be supported on this browser.';
+                        return;
+                    }
+                    if (!file.type.match('image.*')) {
+                        status.textContent = 'Error: The selected file does not appear to be an image.'
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.addEventListener('load', event => {
+                        output.src = event.target.result;
+                    });
+                    reader.readAsDataURL(file);
+                });
+            }
+        </script>
+        <script src="s3_photo.js"></script>
+    </body>
+</html>
