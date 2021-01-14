@@ -34,17 +34,7 @@ RUN cd ~ && \
 COPY requirements.txt /root/lookalike/requirements.txt
 WORKDIR /root/lookalike
 RUN pip3 install -r requirements.txt
-# CMD cd /root/lookalike/src/python/lookalike && python3 lookalike.py
 COPY . /root/lookalike
 WORKDIR /root/lookalike/src/python
 ENV PYTHONUNBUFFERED=1
 ENTRYPOINT ["python3", "aws_client.py"]
-
-#
-#COPY . /root/face_recognition
-#RUN cd /root/face_recognition && \
-#    pip3 install -r requirements.txt && \
-#    python3 setup.py install
-#
-#CMD cd /root/face_recognition/examples && \
-#    python3 recognize_faces_in_pictures.py

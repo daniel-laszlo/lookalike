@@ -1,4 +1,3 @@
-
 // Create WebSocket connection.
 const apiGSocket = new WebSocket('wss://8lxphbfn9a.execute-api.eu-west-2.amazonaws.com/production');
 apiGSocket.onmessage = function(evt) {onMessageReceived(evt)};
