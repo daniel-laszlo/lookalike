@@ -4,11 +4,11 @@ The project's primary goal is for me to practice my AWS skills.
 
 But at some point it will be capable to also identify your celebrity lookalikes! :blush: http://lookalike.daniel-laszlo.me/
 
-| NOTE: The project is still in its early phases and currently is only capable of identifying pictures of either Donald Trump or Joe Biden. |
+| NOTE: At this point the project can only identify the presidents of the 2020 election: Donald Trump and Joe Biden. |
 | --- |
 
 ## Face recognition
-I am using Adam Geitgey's face recognition project to serve find face matches: 
+I am using Adam Geitgey's face recognition project to find face matches: 
 [ageitgey/face_recognition](https://github.com/ageitgey/face_recognition)
 
 ## TODO
@@ -17,6 +17,7 @@ I am using Adam Geitgey's face recognition project to serve find face matches:
 [as described here](https://github.com/ageitgey/face_recognition/blob/master/examples/face_recognition_svm.py).
 - [ ] Develop decent website
 - [ ] SSL certificate on website
+- [ ] Use AWS CodePipeline
 
 ## Architecture
 ![arch](lookalike_architecture.png "arch")
