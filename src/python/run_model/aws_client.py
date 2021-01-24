@@ -5,7 +5,7 @@ import traceback
 import json
 import os
 
-from lookalike import decide_between_presidents
+from lookalike import find_lookalike
 
 # input_bucket_name = 'celebritylookalike'
 # sqsqueue_name = 'LookalikeSubmittedJobsQueue'
@@ -42,7 +42,7 @@ def process_images():
             print(f'Got message with connection_id {connection_id} and s3_key {s3_key}')
 
             file_path = download_file(s3_key)
-            response = decide_between_presidents(file_path)
+            response = find_lookalike(file_path)
             print(response)
             send_message_to_connection(connection_id, response)
         except Exception as e:

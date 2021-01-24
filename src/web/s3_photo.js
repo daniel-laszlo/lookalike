@@ -23,47 +23,40 @@ function uuidv4() {
     });
 }
 
-function uploadPhoto() {
+async function uploadPhoto() {
     document.getElementById('response').innerHTML = "Uploading...";
     var files = document.getElementById("photoupload").files;
     if (!files.length) {
-        return alert("Please choose a file to upload first.");
+        alert("Please choose a file to upload first.");
     }
     var file = files[0];
     if (!file.type.match('image.*')) {
         alert('Unknown format');
     }
 
-    var fileName = uuidv4() + file.name;
+    var fileName = 'upload/' + uuidv4() + file.name;
 
-    // Use S3 ManagedUpload class as it supports multipart uploads
-    var upload = new AWS.S3.ManagedUpload({
-        params: {
-            Bucket: albumBucketName,
-            Key: "upload/" + fileName,
-            Body: file,
-            ACL: "public-read",
-        }
+    const res = await axios({
+        url: 'https://rllzdt898b.execute-api.eu-west-2.amazonaws.com/prod/presignedurl',
+        method: 'post',
+        data: {'key': fileName}
     });
 
-    var promise = upload.promise();
-
-    promise.then(
-        function(data) {
-            console.log(data.key);
-            sendS3Key(data.key);
-            document.getElementById('response').innerHTML = "Uploaded photo! Working...";
-        },
-        function(err) {
-            return alert("There was an error uploading your photo: ", err.message);
-        }
-    );
+    console.log(res);
+    fetch(res.uploadURL, {
+        method: 'PUT',
+        body: file
+    }).then(res => {
+        console.log('Result: ', res)
+        console.log(fileName);
+        sendS3Key(fileName);
+        document.getElementById('response').innerHTML = "Uploaded photo! Working...";
+    });
 }
 
 function sendS3Key(key) {
     apiGSocket.send(JSON.stringify({"action": "submitJob", "key": key}))
 }
-
 
 function onMessageReceived(payload) {
     var message = JSON.parse(payload.data);
@@ -72,8 +65,7 @@ function onMessageReceived(payload) {
     if (message.action === 'connected') {
         connectionId = message.connectionId;
         console.log(`Received connection id: ${connectionId}`)
-    }
-    if (message.action === 'jobfinished') {
+    } else if (message.action === 'jobfinished') {
         console.log(`Got response from backend ${message.response}`)
         var biden = message.response.biden;
         var trump = message.response.trump;
@@ -92,7 +84,6 @@ function onMessageReceived(payload) {
         } else {
             result = 'There are no faces on this picture!'
         }
-
         document.getElementById('response').innerHTML = `Result: ${result}`;
     }
 }

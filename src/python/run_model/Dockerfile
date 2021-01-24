@@ -1,4 +1,4 @@
-FROM python:3.6-slim-stretch
+FROM python:3.7-slim-stretch
 
 RUN apt-get -y update
 RUN apt-get install -y --fix-missing \
@@ -31,10 +31,9 @@ RUN cd ~ && \
     python3 setup.py install --yes USE_AVX_INSTRUCTIONS
 
 
-COPY requirements.txt /root/lookalike/requirements.txt
-WORKDIR /root/lookalike
+COPY requirements.txt /root/run_model/requirements.txt
+WORKDIR /root/run_model
 RUN pip3 install -r requirements.txt
-COPY . /root/lookalike
-WORKDIR /root/lookalike/src/python
+COPY . /root/run_model
 ENV PYTHONUNBUFFERED=1
 ENTRYPOINT ["python3", "aws_client.py"]

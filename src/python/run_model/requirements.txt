@@ -1,0 +1,4 @@
+face_recognition
+boto3
+joblib
+scikit-learn
